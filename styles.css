@@ -3,6 +3,22 @@
     margin: 0;
 }
 
+body.active {
+    overflow: hidden;
+    position: relative;
+}
+
+body.active::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
 .container {
     max-width: 1100px;
     margin: auto;
@@ -62,6 +78,13 @@ td:nth-child(6), td:nth-child(7), td:nth-child(8){
     cursor: pointer;
 }
 
+.save{
+    background-image: url("/images/save_icon.svg");
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+}
+
 .archive{
     background-image: url("/images/archive_dark.svg");
     cursor: pointer;
@@ -105,3 +128,31 @@ button {
     display: flex;
     align-items: center;
 }
+
+.edit-module {
+    position: absolute;
+    top: 10%;
+    left: 30%;
+    width: 50%;
+    height: 300px;
+    background-color: white;
+    z-index: 2;
+    border-radius: 20px;
+}
+
+.edit-form{
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.edit-form input, .edit-form select{
+    margin: 10px;
+}
+
+.edit-form button{
+    margin: 10px 0;
+    padding: 10px;
+
+}
+

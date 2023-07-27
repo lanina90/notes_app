@@ -1,3 +1,5 @@
+import {trimText, createDate, getCategoryImage, getDatesFromString} from "./utils/functions.js";
+
 let notes = [
   {
     title: 'Shopping list',
@@ -20,7 +22,7 @@ let notes = [
     created: 'July 15, 2023',
     content: 'Implement new feature for app before 18/07/2023',
     category: 'Idea',
-    dates: '18/07/2023',
+    dates: '',
     archived: false,
   },
   {
@@ -59,59 +61,23 @@ let notes = [
 
 document.addEventListener('DOMContentLoaded', (event) => {
 
-  const getDatesFromString = (str) => {
-    const matches = str.match(/\d{1,2}\/\d{1,2}\/\d{4}/g);
-    return matches ? matches.join(', ') : '';
-  }
-
-  const getCategoryImage = (category) => {
-    let categoryImage;
-    switch (category) {
-      case "Task":
-        categoryImage = "/images/task_icon.svg";
-        break;
-      case "Random Thought":
-        categoryImage = "/images/thought_icon.svg";
-        break;
-      case "Idea":
-        categoryImage = "/images/idea_icon.svg";
-        break;
-      default:
-        categoryImage = "";
-    }
-    return categoryImage;
-  }
-
-  const createDate = () => {
-    let date = new Date()
-    let options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return date.toLocaleDateString('en-US', options);
-  }
-
-  const trimText = (text, maxLength) => {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength) + '...';
-    } else {
-      return text;
-    }
-  }
-
   const renderNote = (note, index, noteBody) => {
     let categoryImage = getCategoryImage(note.category);
     let titleText = trimText(note.title, 20);
     let noteText = trimText(note.content, 18);
     const tr = document.createElement('tr');
+    tr.id = `note-${index}`;
 
     tr.innerHTML = `
-       <td>
+       <td id="note-title-${index}">
            <div class="flex-container">
                <div class="category-image"><img src="${categoryImage}" alt="${note.category}" /></div> 
                <div>${titleText}</div>
            </div>
         </td> 
         <td>${note.created}</td>
-        <td>${note.category}</td>
-        <td>${noteText}</td>
+        <td id="note-category-${index}">${note.category}</td>
+        <td id="note-text-${index}">${noteText}</td>
         <td>${note.dates}</td>
         <td> <div id="edit-note" data-index="${index}" class="pic edit"/></td>
         <td> <div id="archive-note" data-index="${index}" class="pic archive"/></td>
@@ -121,6 +87,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   }
 
   const renderNotes = () => {
+
     const notesBody = document.querySelector('#notes-body');
     notesBody.innerHTML = '';
     notes.forEach((note, index) => {
@@ -128,6 +95,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
         renderNote(note, index, notesBody);
       }
     });
+
+    const editButtons = document.querySelectorAll('#edit-note');
+    for (let button of editButtons) {
+      button.addEventListener('click', (event) => {
+        editNote(event.target.dataset.index)
+        event.currentTarget.className = 'pic save'
+        }
+      );
+    }
 
     const archiveButtons = document.querySelectorAll('#archive-note');
     for (let button of archiveButtons) {
@@ -139,6 +115,60 @@ document.addEventListener('DOMContentLoaded', (event) => {
       button.addEventListener('click', (event) => removeNote(event.target.dataset.index));
     }
   }
+
+  const editNote = (index) => {
+    const note = notes[index];
+    const editSection = document.createElement('section');
+    const editForm = document.createElement('form');
+
+    document.body.className = 'active'
+    editSection.className = 'edit-module'
+    editForm.className = 'edit-form'
+
+    editForm.innerHTML = `
+
+    <label for="title">Title</label>
+    <input type="text" id="title" value="${note.title}"/>
+    <label for="content">Content</label>
+    <input type="text" id="content" value="${note.content}"/>
+     <label for="category">Category</label>
+      <select id="category" name="category">
+        <option value="Task">Task</option>
+        <option value="Random Thought">Random Thought</option>
+        <option value="Idea">Idea</option>
+      </select>
+    <button type="submit">Save</button>
+  `;
+
+    for (let option of editForm.querySelector('#category').options) {
+      if (option.value === note.category) {
+        option.selected = true;
+        break;
+      }
+    }
+
+    editForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      note.title = editForm.querySelector('#title').value;
+      note.content = editForm.querySelector('#content').value;
+      note.category = editForm.querySelector('#category').value;
+
+      note.dates = getDatesFromString(note.content);
+
+      renderNotes();
+
+      editSection.remove()
+      document.body.className = ''
+
+    });
+    editSection.append(editForm);
+
+    document.body.appendChild(editSection);
+
+    editForm.style.display = 'flex';
+  };
+
+
   const renderArchivedNotes = () => {
     const archivedNotesBody = document.querySelector('#archived-notes-body');
     archivedNotesBody.innerHTML = '';
@@ -198,7 +228,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
   const removeNote = (index) => {
     notes.splice(index, 1);
     renderNotes();
-
   }
 
   const unArchiveNote = (index) => {
@@ -218,5 +247,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 
   renderNotes();
+  renderArchivedNotes();
 
 });
