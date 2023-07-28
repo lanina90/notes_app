@@ -1,0 +1,157 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body.active {
+    overflow: hidden;
+    position: relative;
+}
+
+body.active::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.container {
+    max-width: 1100px;
+    margin: auto;
+}
+
+.notes {
+    width: 100%;
+    border-spacing: 0 10px;
+    margin: auto;
+}
+
+.notes span {
+    color: grey;
+}
+
+th {
+    background-color: grey;
+    color: white;
+    text-align: left;
+    padding: 10px;
+
+}
+
+th:nth-child(1) {
+    text-align: center;
+    border-radius: 10px 0 0 10px;
+}
+
+th:last-child {
+    border-radius: 0 10px 10px 0;
+}
+
+td {
+    background-color: #E2E4EC;
+    padding: 10px 0;
+    color: grey;
+}
+
+td:nth-child(1){
+    width: 20%;
+    color: inherit;
+}
+
+td:nth-child(2), td:nth-child(3){
+    width: 15%;
+}
+
+td:nth-child(4){
+    width: 15%;
+}
+
+td:nth-child(6), td:nth-child(7), td:nth-child(8){
+    width: 3%;
+}
+
+.pic {
+    width: 30px;
+    height: 30px;
+}
+
+.edit{
+    background-image: url("/images/edit_icon.svg");
+    cursor: pointer;
+}
+
+.archive{
+    background-image: url("/images/archive_dark.svg");
+    cursor: pointer;
+}
+
+.remove{
+    background-image: url("/images/remove_dark.svg");
+    cursor: pointer;
+}
+
+.unarchive{
+    background-image: url("/images/unarchive_icon.svg");
+    cursor: pointer;
+}
+
+.create-btn {
+    display: flex;
+    justify-content: flex-end;
+}
+
+button {
+    cursor: pointer;
+}
+
+.category-image {
+    background-color: #4d4c4b;
+    width: 30px;
+    height: 30px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    margin-right: 10px;
+}
+
+.category-image img {
+    width: 20px;
+}
+
+.flex-container {
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.edit-module {
+    position: absolute;
+    top: 10%;
+    left: 30%;
+    width: 50%;
+    height: 300px;
+    background-color: white;
+    z-index: 2;
+    border-radius: 20px;
+}
+
+.edit-form{
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.edit-form input, .edit-form select{
+    margin: 10px;
+}
+
+.edit-form button{
+    margin: 10px 0;
+    padding: 10px;
+
+}
+
