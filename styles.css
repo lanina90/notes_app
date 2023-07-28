@@ -38,10 +38,17 @@ th {
     background-color: grey;
     color: white;
     text-align: left;
+    padding: 10px;
+
 }
 
 th:nth-child(1) {
     text-align: center;
+    border-radius: 10px 0 0 10px;
+}
+
+th:last-child {
+    border-radius: 0 10px 10px 0;
 }
 
 td {
@@ -70,7 +77,6 @@ td:nth-child(6), td:nth-child(7), td:nth-child(8){
 .pic {
     width: 30px;
     height: 30px;
-
 }
 
 .edit{

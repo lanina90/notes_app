@@ -45,6 +45,7 @@
         <option value="Task">Task</option>
         <option value="Random Thought">Random Thought</option>
         <option value="Idea">Idea</option>
+        <option value="Quote">Quote</option>
       </select>
       <label for="content">Notes</label>
       <input type="text" id="content" name="content" required>
@@ -71,7 +72,18 @@
     </table>
   </section>
 
-</div>
+  <section>
+    <table id="summary" class="notes">
+      <thead>
+      <tr>
+        <th>Note Category</th>
+        <th>Active</th>
+        <th>Archived</th>
+      </thead>
+      <tbody id="summary-body"></tbody>
+    </table>
+  </section>
 
+</div>
 </body>
 </html>

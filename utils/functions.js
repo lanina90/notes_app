@@ -15,6 +15,9 @@ export const getCategoryImage = (category) => {
     case "Idea":
       categoryImage = "/images/idea_icon.svg";
       break;
+    case "Quote":
+      categoryImage = "/images/quotes_icon.svg";
+      break;
     default:
       categoryImage = "";
   }

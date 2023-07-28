@@ -1,63 +1,5 @@
 import {trimText, createDate, getCategoryImage, getDatesFromString} from "./utils/functions.js";
-
-let notes = [
-  {
-    title: 'Shopping list',
-    created: 'June 21, 2023',
-    content: 'Bread, cucumbers, salt',
-    category: 'Task',
-    dates: '',
-    archived: true,
-  },
-  {
-    title: 'The theory of evolution',
-    created: 'June 29, 2023',
-    content: 'The evolution theory',
-    category: 'Random Thought',
-    dates: '',
-    archived: false,
-  },
-  {
-    title: 'New feature',
-    created: 'July 15, 2023',
-    content: 'Implement new feature for app before 18/07/2023',
-    category: 'Idea',
-    dates: '',
-    archived: false,
-  },
-  {
-    title: 'Workout routine',
-    created: 'July 20, 2023',
-    content: '1. Pushups 2. Situps 3. Squats',
-    category: 'Task',
-    dates: '20/07/2023, 24/07/2023',
-    archived: false,
-  },
-  {
-    title: 'Book suggestions',
-    created: 'July 22, 2023',
-    content: '1. The Great Gatsby 2. To Kill a Mockingbird',
-    category: 'Random Thought',
-    dates: '',
-    archived: false,
-  },
-  {
-    title: 'Grocery shopping',
-    created: 'July 23, 2023',
-    content: 'Milk, Eggs, Bread, Fruits',
-    category: 'Task',
-    dates: '29/07/2023',
-    archived: false,
-  },
-  {
-    title: 'Car service',
-    created: 'July 25, 2023',
-    content: 'Need to service the car',
-    category: 'Task',
-    dates: '1/08/2023',
-    archived: false,
-  }
-];
+import {notes} from "./utils/data.js";
 
 document.addEventListener('DOMContentLoaded', (event) => {
 
@@ -136,6 +78,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         <option value="Task">Task</option>
         <option value="Random Thought">Random Thought</option>
         <option value="Idea">Idea</option>
+        <option value="Quote">Quote</option>
       </select>
     <button type="submit">Save</button>
   `;
@@ -146,7 +89,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         break;
       }
     }
-
     editForm.addEventListener('submit', (event) => {
       event.preventDefault();
       note.title = editForm.querySelector('#title').value;
@@ -154,12 +96,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
       note.category = editForm.querySelector('#category').value;
 
       note.dates = getDatesFromString(note.content);
-
       renderNotes();
-
       editSection.remove()
       document.body.className = ''
-
     });
     editSection.append(editForm);
 
@@ -167,7 +106,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     editForm.style.display = 'flex';
   };
-
 
   const renderArchivedNotes = () => {
     const archivedNotesBody = document.querySelector('#archived-notes-body');
@@ -217,23 +155,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     form.reset();
 
     renderNotes();
-  }
-
-  const archiveNote = (index) => {
-    notes[index].archived = true;
-    renderNotes();
-    renderArchivedNotes();
-  }
-
-  const removeNote = (index) => {
-    notes.splice(index, 1);
-    renderNotes();
-  }
-
-  const unArchiveNote = (index) => {
-    notes[index].archived = false;
-    renderNotes();
-    renderArchivedNotes();
+    renderSummaryTable();
   }
 
   document.getElementById('create-note-btn').addEventListener('click', () => {
@@ -245,6 +167,60 @@ document.addEventListener('DOMContentLoaded', (event) => {
     createNote();
   });
 
+  const archiveNote = (index) => {
+    notes[index].archived = true;
+    renderNotes();
+    renderArchivedNotes();
+    renderSummaryTable();
+  }
+
+  const removeNote = (index) => {
+    notes.splice(index, 1);
+    renderNotes();
+    renderSummaryTable();
+  }
+
+  const unArchiveNote = (index) => {
+    notes[index].archived = false;
+    renderNotes();
+    renderArchivedNotes();
+    renderSummaryTable();
+  }
+
+  function renderSummaryTable() {
+
+    const categoriesCount = {};
+
+    notes.forEach(note => {
+
+      const status = note.archived ? 'archived' : 'active';
+      const category = note.category;
+
+      if (!categoriesCount[category]) {
+        categoriesCount[category] = {
+          active: 0,
+          archived: 0
+        };
+      }
+      categoriesCount[category][status]++;
+    });
+
+    const summaryBody = document.getElementById('summary-body');
+    summaryBody.innerHTML = '';
+
+    for (let category in categoriesCount) {
+      let categoryImage = getCategoryImage(category);
+      const row = document.createElement('tr');
+      row.innerHTML = `
+    <td> <div class="flex-container"><div class="category-image"><img src="${categoryImage}" alt="${category}" /></div> ${category}</div></td>
+    <td>${categoriesCount[category].active}</td>
+    <td>${categoriesCount[category].archived}</td>
+    `;
+      summaryBody.appendChild(row);
+    }
+  }
+
+  renderSummaryTable();
 
   renderNotes();
   renderArchivedNotes();
