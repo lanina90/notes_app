@@ -84,13 +84,6 @@ td:nth-child(6), td:nth-child(7), td:nth-child(8){
     cursor: pointer;
 }
 
-.save{
-    background-image: url("/images/save_icon.svg");
-    cursor: pointer;
-    width: 20px;
-    height: 20px;
-}
-
 .archive{
     background-image: url("/images/archive_dark.svg");
     cursor: pointer;
